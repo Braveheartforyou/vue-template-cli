@@ -1,0 +1,31 @@
+{
+  "name": "vue-template-cli",
+  "version": "1.0.0",
+  "description": "vue-template-cli init vue project",
+  "main": "index.js",
+  "scripts": {
+    "complie": "babel src -d dist",
+    "watch": "npm run complie -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Braveheartforyou/vue-template-cli.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Braveheartforyou/vue-template-cli/issues"
+  },
+  "homepage": "https://github.com/Braveheartforyou/vue-template-cli#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-env": "^2.4.1",
+    "commander": "^5.1.0",
+    "download-git-repo": "^3.0.2",
+    "ini": "^1.3.5",
+    "inquirer": "^7.3.2",
+    "log-symbols": "^4.0.0",
+    "ora": "^4.0.5",
+    "rimraf": "^3.0.2"
+  }
+}
