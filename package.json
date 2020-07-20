@@ -17,6 +17,11 @@
     "url": "https://github.com/Braveheartforyou/vue-template-cli/issues"
   },
   "homepage": "https://github.com/Braveheartforyou/vue-template-cli#readme",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-env": "^2.4.1",
@@ -27,5 +32,18 @@
     "log-symbols": "^4.0.0",
     "ora": "^4.0.5",
     "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-angular": "^9.1.1",
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
+    "husky": "^4.2.5",
+    "standard-version": "^8.0.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
