@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+/*
+ * @Descripttion: vue init
+ * @Author: all
+ * @Date: 2020-07-20 09:32:51
+ * @LastEditors: all
+ * @LastEditTime: 2020-07-20 17:57:58
+ */ 
+
+const program = require('commander')
+const home = require('user-home');
+const chalk = require('chalk')
+
+
+/**
+ * Usage
+ */
+
+ program.usage('<template-name> [project-name]')
+        .option('-c, --clone', 'use git clone')
+        .option('--offline', 'use cached template')
+
+/** 
+ * Help
+*/
+
+program.on('--help', () => {
+  console.log(' EXamples:');
+  console.log();
+  console.log(chalk.gray('    # create a new project with an official template'))
+  console.log('    $ vue init webpack my-project')
+  console.log()
+  console.log(chalk.gray('    # create a new project straight from a github template'))
+  console.log('    $ vue init username/repo my-project')
+  console.log()
+})
+
+function help () {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
+}
+
+help ()
