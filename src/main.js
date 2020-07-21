@@ -3,7 +3,7 @@
  * @Author: asyncnode
  * @Date: 2020-07-20 23:22:07
  * @LastEditors: all
- * @LastEditTime: 2020-07-21 17:40:31
+ * @LastEditTime: 2020-07-22 00:18:42
  */
 
 import apply from './index';
@@ -13,6 +13,7 @@ const userHome = require('user-home');
 const chalk = require('chalk');
 const symbol = require('log-symbols');
 const version = require('../package.json');
+// console.log('apply: ', apply);
 
 /**
  * action Map 命令行配置
@@ -50,7 +51,7 @@ for (let actionkey in actionMap) {
       switch (actionkey) {
         case 'config':
           //配置
-          apply(config, ...programParams);
+          apply(actionkey, ...programParams);
           break;
         case 'init':
           !programParams[0]
@@ -60,7 +61,7 @@ for (let actionkey in actionMap) {
               )
             : !programParams[1]
             ? console.log(symbol.error, chalk.red('项目名称'))
-            : apply(config, ...programParams);
+            : apply(actionkey, ...programParams);
           // programParams[0]
           // if (programParams[0]) {
           //   apply(config, ...programParams);
