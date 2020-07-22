@@ -15,8 +15,13 @@
     "type": "git",
     "url": "git+https://github.com/Braveheartforyou/vue-template-cli.git"
   },
-  "author": "",
+  "author": "blackdou",
   "license": "MIT",
+  "keywords": [
+    "vue",
+    "vue-cli",
+    "vue-template"
+  ],
   "bugs": {
     "url": "https://github.com/Braveheartforyou/vue-template-cli/issues"
   },
