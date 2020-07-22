@@ -3,22 +3,28 @@
  * @Author: all
  * @Date: 2020-07-22 00:01:19
  * @LastEditors: all
- * @LastEditTime: 2020-07-22 00:06:11
+ * @LastEditTime: 2020-07-22 11:16:06
  */
 
 import { getAll } from './rc';
-import downloadGit from 'download-git-repo';
+var downloadGit = require('download-git-repo');
 
-export const downlodaLocal = async (projectName) => {
+export const downloadLocal = async (templateName, projectName) => {
+  console.log('templateName, projectName: ', templateName, projectName);
   let config = await getAll();
-  let repoSite = `${config.registry}/${config.templateName}`;
-  console.log('仓库地址、项目名', repoSite, projectName);
+  console.log('config: ', config);
+  let api = `github:${config.registry}/${templateName}#vue-template-sap`;
+  console.log('api:', api);
   return new Promise((resolve, reject) => {
-    downloadGit(repoSite, projectName, (err) => {
+    downloadGit(api, projectName, (err) => {
+      console.log('err: ', err);
       if (err) {
+        console.log('err: ', err);
         reject(err);
       }
       resolve();
     });
+  }).catch((err) => {
+    console.log(err);
   });
 };

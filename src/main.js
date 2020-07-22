@@ -3,13 +3,13 @@
  * @Author: asyncnode
  * @Date: 2020-07-20 23:22:07
  * @LastEditors: all
- * @LastEditTime: 2020-07-22 00:18:42
+ * @LastEditTime: 2020-07-22 10:02:36
  */
 
 import apply from './index';
 const program = require('commander');
-const config = require('./libs/config');
-const userHome = require('user-home');
+// const config = require('./libs/config');
+// const userHome = require('user-home');
 const chalk = require('chalk');
 const symbol = require('log-symbols');
 const version = require('../package.json');
@@ -34,12 +34,6 @@ let actionMap = {
     ]
   }
 };
-program
-  .command('clone <source> [destination]')
-  .description('clone a repository into a newly created directory')
-  .action((source, destination) => {
-    console.log('clone command called');
-  });
 for (let actionkey in actionMap) {
   let programParams = process.argv.slice(3); // 命令行参数数组
   program
