@@ -3,13 +3,20 @@
  * @Descripttion: vue init
  * @Author: all
  * @Date: 2020-07-20 09:32:51
- * @LastEditors: all
- * @LastEditTime: 2020-07-22 09:00:13
+ * @LastEditors: heidous
+ * @LastEditTime: 2020-07-31 18:08:00
  */
 
 const program = require('commander');
-// const home = require('user-home');
+const home = require('user-home');
 const chalk = require('chalk');
+const tildify = require('tildify');
+const path = require('path');
+const exists = require('fs').existsSync;
+const inquirer = require('inquirer');
+const logger = require('logger');
+
+console.log(1231231);
 
 /**
  * Usage
@@ -30,12 +37,12 @@ program.on('--help', () => {
   console.log(
     chalk.gray('    # create a new project with an official template')
   );
-  console.log('    $ vue init webpack my-project');
+  console.log('    $ vuetemplate init webpack my-project');
   console.log();
   console.log(
     chalk.gray('    # create a new project straight from a github template')
   );
-  console.log('    $ vue init username/repo my-project');
+  console.log('    $ vuetemplate init username/repo my-project');
   console.log();
 });
 
@@ -45,3 +52,56 @@ function help() {
 }
 
 help();
+
+/**
+ * Settins.
+ */
+
+let template = program.args[0];
+const hasSlash = template.indexOf('/') > -1;
+const rawName = program.args[1];
+const inPlace = !rawName || rawName === '.';
+const name = inPlace ? path.relative('../', process.cwd()) : rawName;
+const to = path.resolve(rawName || '.');
+const clone = program.clone || false;
+
+const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'));
+if (program.offline) {
+  console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
+  template = tmp;
+}
+console.log('tmp: ', template, tmp);
+
+/**
+ * Padding.
+ */
+
+console.log();
+process.on('exit', () => {
+  console.log();
+});
+
+if (inPlace || exists(to)) {
+  inquirer
+    .prompt([
+      {
+        type: 'confirm',
+        message: inPlace
+          ? 'Generate project in current directory'
+          : 'Target directory exists. Continue?',
+        name: 'ok'
+      }
+    ])
+    .then((answers) => {
+      if (answers.ok) {
+        console.log('ok');
+      }
+    })
+    .catch(logger.fatal);
+} else {
+  console.log('no ok');
+}
+
+function run() {
+  // check if template is local
+}

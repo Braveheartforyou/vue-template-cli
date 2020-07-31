@@ -2,8 +2,8 @@
  * @Descripttion: vuetemplate init
  * @Author: all
  * @Date: 2020-07-21 17:40:53
- * @LastEditors: all
- * @LastEditTime: 2020-07-22 11:13:17
+ * @LastEditors: heidous
+ * @LastEditTime: 2020-07-30 17:45:08
  */
 
 import { downloadLocal } from './libs/download';
@@ -104,24 +104,6 @@ let init = async (templateName, projectName) => {
             () => {
               console.log(111);
               loading.succeed();
-              // const fileName = `${projectName}/package.json`;
-              // if (fs.existsSync(fileName)) {
-              //   const data = fs.readFileSync(fileName).toString();
-              //   let json = JSON.parse(data);
-              //   json.name = projectName;
-              //   json.author = answer.author;
-              //   json.description = answer.description;
-              //   //修改项目文件夹中 package.json 文件
-              //   fs.writeFileSync(
-              //     fileName,
-              //     JSON.stringify(json, null, '\t'),
-              //     'utf-8'
-              //   );
-              //   console.log(
-              //     symbol.success,
-              //     chalk.green('Project initialization finished!')
-              //   );
-              // }
             },
             () => {
               loading.fail();

@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "vue-template-cli init vue project",
   "bin": {
-    "vue-template-init": "bin/vue-template-init",
-    "vuetemplate": "./bin/www"
+    "vuetemplate": "bin/vue-template-init"
   },
   "scripts": {
     "complie": "npx babel src -d dist --presets es2015",
@@ -52,7 +51,10 @@
     "commitizen": "^4.1.2",
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
-    "standard-version": "^8.0.2"
+    "logger": "0.0.1",
+    "standard-version": "^8.0.2",
+    "tildify": "^2.0.0",
+    "user-home": "^2.0.0"
   },
   "config": {
     "commitizen": {
