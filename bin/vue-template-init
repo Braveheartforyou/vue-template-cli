@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-07-31 18:08:00
+ * @LastEditTime: 2020-08-03 17:34:31
  */
 
 const program = require('commander');
@@ -15,6 +15,9 @@ const path = require('path');
 const exists = require('fs').existsSync;
 const inquirer = require('inquirer');
 const logger = require('logger');
+const download = require('download-git-repo');
+const ora = require('ora');
+const rm = require('rimraf').sync;
 
 console.log(1231231);
 
@@ -58,6 +61,7 @@ help();
  */
 
 let template = program.args[0];
+// console.log('program.args: ', program.args);
 const hasSlash = template.indexOf('/') > -1;
 const rawName = program.args[1];
 const inPlace = !rawName || rawName === '.';
@@ -95,13 +99,45 @@ if (inPlace || exists(to)) {
     .then((answers) => {
       if (answers.ok) {
         console.log('ok');
+        run();
       }
     })
     .catch(logger.fatal);
 } else {
   console.log('no ok');
+  run();
+}
+/**
+ * Download a generate from a template repo.
+ *
+ * @param {String} template
+ */
+function downloadAndGenerate(template) {
+  const spinner = ora('downloading template');
+  spinner.start();
+  if (exists(tmp)) rm(tmp);
+  download(template, tmp, { clone }, (err) => {
+    spinner.stop();
+    if (err)
+      logger.fatal(
+        'Failed to download repo ' + template + ': ' + err.message.trim()
+      );
+    generate(name, tmp, to, (err) => {
+      if (err) logger.fatal(err);
+      console.log();
+      logger.success('Generated "%s".', name);
+    });
+  });
 }
 
 function run() {
-  // check if template is local
+  console.log('hasSlash: ', hasSlash, template);
+  if (!hasSlash) {
+    // use official templates
+    const officialTemplate = 'blackdous/' + template;
+    console.log('officialTemplate: ', officialTemplate);
+    downloadAndGenerate(officialTemplate);
+  } else {
+    downloadAndGenerate(template);
+  }
 }
