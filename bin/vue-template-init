@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-03 17:34:31
+ * @LastEditTime: 2020-08-04 14:56:44
  */
 
 const program = require('commander');
@@ -14,12 +14,9 @@ const tildify = require('tildify');
 const path = require('path');
 const exists = require('fs').existsSync;
 const inquirer = require('inquirer');
-const logger = require('logger');
 const download = require('download-git-repo');
 const ora = require('ora');
 const rm = require('rimraf').sync;
-
-console.log(1231231);
 
 /**
  * Usage
@@ -59,8 +56,13 @@ help();
 /**
  * Settins.
  */
-
-let template = program.args[0];
+let template = program.args[1];
+if (!template) {
+  process.on('exit', () => {
+    console.error(chalk.red('需要一个模板'));
+  });
+  return false;
+}
 // console.log('program.args: ', program.args);
 const hasSlash = template.indexOf('/') > -1;
 const rawName = program.args[1];
@@ -70,11 +72,11 @@ const to = path.resolve(rawName || '.');
 const clone = program.clone || false;
 
 const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'));
-if (program.offline) {
-  console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
-  template = tmp;
-}
-console.log('tmp: ', template, tmp);
+// if (program.offline) {
+//   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
+//   template = tmp;
+// }
+// console.log('tmp: ', template, tmp);
 
 /**
  * Padding.
@@ -119,13 +121,15 @@ function downloadAndGenerate(template) {
   download(template, tmp, { clone }, (err) => {
     spinner.stop();
     if (err)
-      logger.fatal(
-        'Failed to download repo ' + template + ': ' + err.message.trim()
+      console.error(
+        chalk.red(
+          'Failed to download repo ' + template + ': ' + err.message.trim()
+        )
       );
     generate(name, tmp, to, (err) => {
-      if (err) logger.fatal(err);
+      if (err) console.error(chalk.red(err));
       console.log();
-      logger.success('Generated "%s".', name);
+      console.log(chalk.white('Generated "%s".', name));
     });
   });
 }

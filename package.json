@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "vue-template-cli init vue project",
   "bin": {
-    "vuetemplate-init": "bin/vue-template-init"
+    "vue-template-init": "bin/vue-template-init"
   },
   "scripts": {
     "complie": "npx babel src -d dist --presets es2015",
