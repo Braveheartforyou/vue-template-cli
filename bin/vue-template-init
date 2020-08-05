@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-04 14:56:44
+ * @LastEditTime: 2020-08-05 17:58:04
  */
 
 const program = require('commander');
@@ -65,7 +65,7 @@ if (!template) {
 }
 // console.log('program.args: ', program.args);
 const hasSlash = template.indexOf('/') > -1;
-const rawName = program.args[1];
+const rawName = program.args[2];
 const inPlace = !rawName || rawName === '.';
 const name = inPlace ? path.relative('../', process.cwd()) : rawName;
 const to = path.resolve(rawName || '.');
@@ -118,7 +118,10 @@ function downloadAndGenerate(template) {
   const spinner = ora('downloading template');
   spinner.start();
   if (exists(tmp)) rm(tmp);
-  download(template, tmp, { clone }, (err) => {
+  // let $_template = `github:${template}#master`;
+  // console.log('_template: ', $_template, tmp);
+  console.log('template, tmp: ', tmp, template, clone);
+  download(template, tmp, (err) => {
     spinner.stop();
     if (err)
       console.error(
@@ -126,11 +129,11 @@ function downloadAndGenerate(template) {
           'Failed to download repo ' + template + ': ' + err.message.trim()
         )
       );
-    generate(name, tmp, to, (err) => {
-      if (err) console.error(chalk.red(err));
-      console.log();
-      console.log(chalk.white('Generated "%s".', name));
-    });
+    // generate(name, tmp, to, (err) => {
+    //   if (err) console.error(chalk.red(err));
+    //   console.log();
+    //   console.log(chalk.white('Generated "%s".', name));
+    // });
   });
 }
 

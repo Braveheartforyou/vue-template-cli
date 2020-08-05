@@ -3,22 +3,12 @@
  * @Author: heidous
  * @Date: 2020-08-04 16:18:15
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-04 18:04:50
+ * @LastEditTime: 2020-08-05 09:19:36
  */
 
 const async = require('async');
 const inquirer = require('inquirer');
-const chalk = require('chalk');
-const { down } = require('inquirer/lib/utils/readline');
-
-function evaluate(exp, data) {
-  const fn = new Function('data', 'with (data) { return' + exp + '}');
-  try {
-    return fn(data);
-  } catch (e) {
-    console.error(chalk.red('Error when evaluating filter conition: ' + exp));
-  }
-}
+const evaluate = require('./eval');
 
 const promptMapping = {
   string: 'input',
@@ -47,14 +37,29 @@ function prompt(data, key, prompt, done) {
     };
   }
 
-  inquirer.prompt([
-    {
-      type: promptMapping[prompt.type] || prompt.type,
-      name: key,
-      message: prompt.message || prompt.label || key,
-      default: promptDefault,
-      choices: prompt.choices || [],
-      validate: prompt
-    }
-  ]);
+  inquirer
+    .prompt([
+      {
+        type: promptMapping[prompt.type] || prompt.type,
+        name: key,
+        message: prompt.message || prompt.label || key,
+        default: promptDefault,
+        choices: prompt.choices || [],
+        validate: prompt.validate || (() => true)
+      }
+    ])
+    .then((answers) => {
+      if (Array.isArray(answers[key])) {
+        data[key] = {};
+        answers[key].forEach((multiChoiceAnswer) => {
+          data[key][multiChoiceAnswer] = true;
+        });
+      } else if (typeof answers[key] === 'string') {
+        data[key] = answers[key].replace(/“/g, '\\"');
+      } else {
+        data[key] = answers[key];
+      }
+      done();
+    })
+    .catch(done);
 }
