@@ -3,7 +3,7 @@
  * @Author: heidous
  * @Date: 2020-08-04 14:57:19
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-05 18:08:45
+ * @LastEditTime: 2020-08-06 14:59:48
  */
 
 const chalk = require('chalk');
@@ -17,6 +17,7 @@ const getOptions = require('./options');
 const ask = require('./ask');
 const match = require('minimatch');
 const evaluate = require('./eval');
+const logger = require('./logger');
 
 const filter = (files, filters, data, done) => {
   if (!filters) {
@@ -56,5 +57,99 @@ module.exports = function generate(name, src, dest, done) {
     Object.keys(opts.helpers).map((key) => {
       Handlebars.registerHelper(key, opts.helpers[key]);
     });
-    const helpers
+  const helpers = { chalk, logger };
+  if ((opts.metalsmith && typeof opts.metalsmith, before === 'function')) {
+    opts.metalsmith.before(metalsmith, opts, helpers);
+  }
+  metalsmith
+    .use(askQuestions(opts.prompts))
+    .use(filterFiles(opts.filters))
+    .use(renderTemplateFiles(opts.skipInterpolation));
+  if (typeof opts.metalsmith === 'function') {
+    opts.metalsmith(metalsmith, opts, helpers);
+  } else if (opts.metalsmith && typeof opts.metalsmith.after === 'function') {
+    opts.metalsmith.after(metalsmith, opts, helpers);
+  }
+
+  metalsmith
+    .clean(false)
+    .source('.')
+    .destination(dest)
+    .build((err, files) => {
+      done(err);
+      if (typeof opts.complete === 'function') {
+        const helpers = { chalk, logger, files };
+        opts.complete(data, helpers);
+      } else {
+        logMessage(opts.completeMessage, data);
+      }
+    });
+  return data;
 };
+
+function askQuestions(prompts) {
+  return (files, metalsmith, done) => {
+    ask(prompts, metalsmith.metadata(), done);
+  };
+}
+
+function filterFiles(filters) {
+  return (files, metalsmith, done) => {
+    filter(files, filters, metalsmith.metadata().done);
+  };
+}
+
+function renderTemplateFiles(skipInterpolation) {
+  skipInterpolation =
+    typeof skipInterpolation === 'string'
+      ? [skipInterpolation]
+      : skipInterpolation;
+  return (files, metalsmith, done) => {
+    const keys = Object.keys(files);
+    const metalsmithMetadata = metalsmith.metadata();
+    async.each(
+      keys,
+      (files, next) => {
+        if (
+          skipInterpolation &&
+          metalsmith([files], skipInterpolation, { dot: true }).length
+        ) {
+          return next();
+        }
+        const str = files[file].contents.toString();
+        if (!/{{([^{}]*)}}/g.test(str)) {
+          return next();
+        }
+        render(str, metalsmithMetadata, (err, res) => {
+          if (err) {
+            err.message = `[${file}] ${err.message}`;
+            return next(err);
+          }
+          files[file].contents = new Buffer(res);
+          next();
+        });
+      },
+      done
+    );
+  };
+}
+
+function logMessage(message, data) {
+  if (!message) return;
+  render(message, data, (err, res) => {
+    if (err) {
+      console.error(
+        '\n   Error when rendering template complete message: ' +
+          err.message.trim()
+      );
+    } else {
+      console.log(
+        '\n' +
+          res
+            .split(/\r?\n/g)
+            .map((line) => '   ' + line)
+            .join('\n')
+      );
+    }
+  });
+}

@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-05 17:58:04
+ * @LastEditTime: 2020-08-06 17:52:14
  */
 
 const program = require('commander');
@@ -17,6 +17,7 @@ const inquirer = require('inquirer');
 const download = require('download-git-repo');
 const ora = require('ora');
 const rm = require('rimraf').sync;
+const generate = require('../libs/generate');
 
 /**
  * Usage
@@ -129,11 +130,11 @@ function downloadAndGenerate(template) {
           'Failed to download repo ' + template + ': ' + err.message.trim()
         )
       );
-    // generate(name, tmp, to, (err) => {
-    //   if (err) console.error(chalk.red(err));
-    //   console.log();
-    //   console.log(chalk.white('Generated "%s".', name));
-    // });
+    generate(name, tmp, to, (err) => {
+      if (err) console.error(chalk.red(err));
+      console.log();
+      console.log(chalk.white('Generated "%s".', name));
+    });
   });
 }
 
