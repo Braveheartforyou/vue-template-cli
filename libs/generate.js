@@ -3,7 +3,7 @@
  * @Author: heidous
  * @Date: 2020-08-04 14:57:19
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-06 14:59:48
+ * @LastEditTime: 2020-08-10 22:31:07
  */
 
 const chalk = require('chalk');
@@ -37,11 +37,11 @@ const filter = (files, filters, data, done) => {
   done();
 };
 
-Handlebars.registerHelper('if_eq', function(a, b, opts) {
+Handlebars.registerHelper('if_eq', function (a, b, opts) {
   return a === b ? opts.fn(this) : opts.inverse(this);
 });
 
-Handlebars.registerHelper('unless_eq', function(a, b, opts) {
+Handlebars.registerHelper('unless_eq', function (a, b, opts) {
   return a === b ? opts.inverse(this) : opts.fn(this);
 });
 
@@ -58,7 +58,7 @@ module.exports = function generate(name, src, dest, done) {
       Handlebars.registerHelper(key, opts.helpers[key]);
     });
   const helpers = { chalk, logger };
-  if ((opts.metalsmith && typeof opts.metalsmith, before === 'function')) {
+  if (opts.metalsmith && typeof opts.metalsmith.before === 'function') {
     opts.metalsmith.before(metalsmith, opts, helpers);
   }
   metalsmith
