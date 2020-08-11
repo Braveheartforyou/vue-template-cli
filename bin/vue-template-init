@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-06 17:52:14
+ * @LastEditTime: 2020-08-11 10:59:11
  */
 
 const program = require('commander');
@@ -142,7 +142,7 @@ function run() {
   console.log('hasSlash: ', hasSlash, template);
   if (!hasSlash) {
     // use official templates
-    const officialTemplate = 'blackdous/' + template;
+    const officialTemplate = 'Braveheartforyou/' + template;
     console.log('officialTemplate: ', officialTemplate);
     downloadAndGenerate(officialTemplate);
   } else {
