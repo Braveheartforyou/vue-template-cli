@@ -3,7 +3,7 @@
  * @Author: heidous
  * @Date: 2020-08-04 14:57:19
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-11 14:49:26
+ * @LastEditTime: 2020-08-13 11:21:06
  */
 
 const chalk = require('chalk');
@@ -20,6 +20,7 @@ const evaluate = require('./eval');
 const logger = require('./logger');
 
 const filter = (files, filters, data, done) => {
+  console.log('done: ', done);
   if (!filters) {
     return done();
   }
@@ -71,12 +72,12 @@ module.exports = function generate(name, src, dest, done) {
     opts.metalsmith.after(metalsmith, opts, helpers);
   }
 
+  console.log('done: ', done);
   metalsmith
     .clean(false)
     .source('.')
     .destination(dest)
     .build((err, files) => {
-      // console.log(err, false);
       done(err);
       if (typeof opts.complete === 'function') {
         const helpers = { chalk, logger, files };
@@ -96,7 +97,7 @@ function askQuestions(prompts) {
 
 function filterFiles(filters) {
   return (files, metalsmith, done) => {
-    filter(files, filters, metalsmith.metadata().done);
+    filter(files, filters, metalsmith.metadata(), done);
   };
 }
 
@@ -110,10 +111,10 @@ function renderTemplateFiles(skipInterpolation) {
     const metalsmithMetadata = metalsmith.metadata();
     async.each(
       keys,
-      (files, next) => {
+      (file, next) => {
         if (
           skipInterpolation &&
-          metalsmith([files], skipInterpolation, { dot: true }).length
+          metalsmith([file], skipInterpolation, { dot: true }).length
         ) {
           return next();
         }
@@ -126,7 +127,7 @@ function renderTemplateFiles(skipInterpolation) {
             err.message = `[${file}] ${err.message}`;
             return next(err);
           }
-          files[file].contents = new Buffer(res);
+          files[file].contents = new Buffer.alloc(res);
           next();
         });
       },

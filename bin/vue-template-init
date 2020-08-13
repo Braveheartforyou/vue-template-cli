@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-11 10:59:11
+ * @LastEditTime: 2020-08-13 10:50:05
  */
 
 const program = require('commander');
@@ -131,6 +131,7 @@ function downloadAndGenerate(template) {
         )
       );
     generate(name, tmp, to, (err) => {
+      console.log('err: ', err);
       if (err) console.error(chalk.red(err));
       console.log();
       console.log(chalk.white('Generated "%s".', name));
