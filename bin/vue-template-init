@@ -4,7 +4,7 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-13 10:50:05
+ * @LastEditTime: 2020-08-14 11:30:48
  */
 
 const program = require('commander');
@@ -73,6 +73,7 @@ const to = path.resolve(rawName || '.');
 const clone = program.clone || false;
 
 const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'));
+console.log('tmp: ', tmp);
 // if (program.offline) {
 //   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
 //   template = tmp;

@@ -3,7 +3,7 @@
  * @Author: heidous
  * @Date: 2020-08-04 14:57:19
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-13 11:21:06
+ * @LastEditTime: 2020-08-14 10:59:47
  */
 
 const chalk = require('chalk');
@@ -127,7 +127,7 @@ function renderTemplateFiles(skipInterpolation) {
             err.message = `[${file}] ${err.message}`;
             return next(err);
           }
-          files[file].contents = new Buffer.alloc(res);
+          files[file].contents = new Buffer(res);
           next();
         });
       },
