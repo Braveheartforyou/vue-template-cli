@@ -1,6 +1,6 @@
 {
   "name": "vue-template-cli",
-  "version": "0.1.0",
+  "version": "v1.0.0-alpha.1",
   "description": "vue-template-cli init vue project",
   "bin": {
     "vue-template-init": "bin/vue-template-init"
