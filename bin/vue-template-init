@@ -4,13 +4,12 @@
  * @Author: all
  * @Date: 2020-07-20 09:32:51
  * @LastEditors: heidous
- * @LastEditTime: 2020-08-14 11:30:48
+ * @LastEditTime: 2020-08-17 15:24:02
  */
 
 const program = require('commander');
 const home = require('user-home');
 const chalk = require('chalk');
-const tildify = require('tildify');
 const path = require('path');
 const exists = require('fs').existsSync;
 const inquirer = require('inquirer');
@@ -26,7 +25,6 @@ const generate = require('../libs/generate');
 program
   .usage('<template-name> [project-name]')
   .option('-c, --clone', 'use git clone')
-  .option('--offline', 'use cached template');
 
 /**
  * Help
@@ -64,7 +62,6 @@ if (!template) {
   });
   return false;
 }
-// console.log('program.args: ', program.args);
 const hasSlash = template.indexOf('/') > -1;
 const rawName = program.args[2];
 const inPlace = !rawName || rawName === '.';
@@ -73,16 +70,6 @@ const to = path.resolve(rawName || '.');
 const clone = program.clone || false;
 
 const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'));
-console.log('tmp: ', tmp);
-// if (program.offline) {
-//   console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`);
-//   template = tmp;
-// }
-// console.log('tmp: ', template, tmp);
-
-/**
- * Padding.
- */
 
 console.log();
 process.on('exit', () => {
@@ -120,8 +107,6 @@ function downloadAndGenerate(template) {
   const spinner = ora('downloading template');
   spinner.start();
   if (exists(tmp)) rm(tmp);
-  // let $_template = `github:${template}#master`;
-  // console.log('_template: ', $_template, tmp);
   console.log('template, tmp: ', tmp, template, clone);
   download(template, tmp, (err) => {
     spinner.stop();
@@ -143,7 +128,6 @@ function downloadAndGenerate(template) {
 function run() {
   console.log('hasSlash: ', hasSlash, template);
   if (!hasSlash) {
-    // use official templates
     const officialTemplate = 'Braveheartforyou/' + template;
     console.log('officialTemplate: ', officialTemplate);
     downloadAndGenerate(officialTemplate);
